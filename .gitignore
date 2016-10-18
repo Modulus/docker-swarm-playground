@@ -1,3 +1,8 @@
+#Vagrant stuffs
 .vagrant
-.idea
 *.log
+#Jetbrains stuffs
+.idea
+
+#Ansible stuffs
+*.rety

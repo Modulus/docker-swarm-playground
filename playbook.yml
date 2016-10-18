@@ -1,7 +1,8 @@
 ---
   - name: Setup docker deamon
-    hosts: localhost
-    connection: localhost
-    gather_facts: False
+    hosts: machine
+    connection: local
+    gather_facts: True
+    become: yes
     roles:
       - docker
