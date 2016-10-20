@@ -1,4 +1,12 @@
 ---
+
+  - name: "Install docker on all machines"
+    hosts: machine
+    gather_facts: True
+    become: yes
+    roles:
+      - docker
+      
   - name: "Fetch first nodes ip and save it, create swarm main manager"
     hosts: machine[0]
     gather_facts: True
