@@ -15,6 +15,7 @@
         debug: msg="{{file_save_facts}}"
       - name: "Init docker swarm"
         command: "docker swarm init --advertise-addr {{manager_ip}}"
+        ignore_errors: yes
       - name: "Register manager token"
         command: "docker swarm join-token manager -q"
         register: manager_token
@@ -26,3 +27,18 @@
         register: manger_token_save_facts
       - name: "Save worker_token in local file"
         local_action: copy content="{{worker_token.stdout}}" dest="{{swarm_worker_token}}"
+
+  - name: "Join workers to swarm"
+    hosts: machine[1:2]
+    gather_facts: True
+    become: yes
+    vars:
+      manager_ip: "{{lookup('file', '{{swarm_manager_ip_file}}') }}"
+      node_token: "{{lookup('file', '{{swarm_worker_token}}') }}"
+      port: 2377
+    tasks:
+      - name: "Join docker swarm as worker nodes"
+        command: "docker swarm join --token {{node_token}} {{manager_ip}}:{{port}}"
+        register: swarm_join_facts
+      - name: "Debug swarm join facts"
+        debug: msg="{{swarm_join_facts}}"
