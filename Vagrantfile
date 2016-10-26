@@ -10,24 +10,17 @@ Vagrant.configure("2") do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
-    N = 3
-    (1..N).each do |machine_id|
-      config.vm.define "machine#{machine_id}" do |machine|
-        machine.vm.hostname = "machine#{machine_id}"
-        machine.vm.box = "ubuntu/trusty64"
-        machine.vm.network "private_network", ip: "192.168.77.#{20+machine_id}"
+      config.vm.hostname = "controller"
+      config.vm.box = "ubuntu/trusty64"
+      config.vm.network "private_network", ip: "192.168.77.200"
 
         # Only execute once the Ansible provisioner,
         # = when all the machines are up and ready.
-        if machine_id == 1
-          machine.vm.provision "ansible_local" do |ansible|
-            # Disable default limit to connect to all the machines
-            ansible.limit = "all"
-            ansible.playbook = "playbook.yml"
-          end
+        config.vm.provision "ansible_local" do |ansible|
+          # Disable default limit to connect to all the machines
+          ansible.limit = "all"
+          ansible.playbook = "controller.yml"
         end
-      end
-    end
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
