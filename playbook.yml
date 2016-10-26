@@ -1,0 +1,7 @@
+---
+  - name: Setup docker deamon
+    hosts: machine
+    gather_facts: True
+    become: yes
+    roles:
+      - docker
